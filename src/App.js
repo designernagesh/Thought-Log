@@ -1,24 +1,48 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
 
+
 function App() {
+  const currentTime = () => {
+    const d = new Date();
+    const h = d.getHours();
+    const m = d.getMinutes();
+    const s = d.getSeconds();
+    const time = `${h}:${m}:${s}`;
+    return time; 
+  }
+
+  const [ inputText, setInputText ] = useState("");
+  const [ thoughts, setThoughts ] = useState([]);
+
+  const changeHandler = (e) => {
+    setInputText(e.target.value)
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    thoughts.push(`${inputText} ${currentTime()}`);
+    setThoughts(thoughts);
+    setInputText("");
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>Thought Log</h1>
+      <form onSubmit={submitHandler}>
+        <input type="text" placeholder='Type Thought' value={inputText} onChange={changeHandler} />
+        <button type='submit'>Post</button>
+      </form>
+      <ul>
+        {thoughts.map( thought => {
+          return (
+            <li>
+              { thought }
+            </li>
+          )
+        })}
+      </ul>
+    </>
   );
 }
 
